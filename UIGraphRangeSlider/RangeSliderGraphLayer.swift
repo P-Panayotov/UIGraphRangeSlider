@@ -43,7 +43,7 @@ class RangeSliderGraphLayer: CALayer {
             }
             
             let topBorder:CGFloat = 20
-            let bottomBorder:CGFloat = 20
+            let bottomBorder:CGFloat = 5
             let graphHeight = slider.bounds.height - topBorder - bottomBorder
             let maxValue = slider.graphPoints.maxElement()
             let columnYPoint = { (graphPoint:Int) -> CGFloat in

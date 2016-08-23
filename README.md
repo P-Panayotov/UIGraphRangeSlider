@@ -9,7 +9,7 @@ UIRangeSlider is a subclass of ```UIControl``` and you can get changes with ```U
 ```
 let rangeSlider = UIGraphRangeSlider()
 rangeSlider.graphPoints = [0,2,6,4,5,8,3,10,12,14,15,16,10,4,1,1,1,1,0]
-rangeSlider.frame =CGRect(x:0, y:0, width: self.view.bounds.width, height: 120)
+rangeSlider.frame = CGRect(x:0, y:0, width: self.view.bounds.width, height: 120)
 ```
 
 ## Configuration

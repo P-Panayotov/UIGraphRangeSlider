@@ -9,58 +9,58 @@
 import UIKit
 import QuartzCore
 
-class UIGraphRangeSlider: UIControl {
+public class UIGraphRangeSlider: UIControl {
 
-    var minimumValue: Double = 0.0 {
+    public var minimumValue: Double = 0.0 {
         didSet {
             updateLayerFrames()
         }
     }
     
-    var maximumValue: Double = 1.0 {
+    public var maximumValue: Double = 1.0 {
         didSet {
             updateLayerFrames()
         }
     }
     
-    var lowerValue: Double = 0.2 {
+    public var lowerValue: Double = 0.2 {
         didSet {
             updateLayerFrames()
         }
     }
     
-    var upperValue: Double = 0.8 {
+    public var upperValue: Double = 0.8 {
         didSet {
             updateLayerFrames()
         }
     }
     
-    var trackTintColor: UIColor = UIColor(white: 0.1, alpha: 1.0) {
+    public var trackTintColor: UIColor = UIColor(white: 0.1, alpha: 1.0) {
         didSet {
             trackLayer.setNeedsDisplay()
         }
     }
     
-    var graphColor: UIColor = UIColor(red: 93.0/255.0, green: 184.0/255.0, blue: 225.0/255.0, alpha: 1.0) {
+    public var graphColor: UIColor = UIColor(red: 93.0/255.0, green: 184.0/255.0, blue: 225.0/255.0, alpha: 1.0) {
         didSet {
             graphLayer.setNeedsDisplay()
         }
     }
     
-    var trackHighlightTintColor: UIColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0) {
+    public var trackHighlightTintColor: UIColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0) {
         didSet {
             trackLayer.setNeedsDisplay()
         }
     }
     
-    var thumbTintColor: UIColor = UIColor.whiteColor() {
+    public var thumbTintColor: UIColor = UIColor.whiteColor() {
         didSet {
             lowerThumbLayer.setNeedsDisplay()
             upperThumbLayer.setNeedsDisplay()
         }
     }
     
-    var curvaceousness: CGFloat = 1.0 {
+    public var curvaceousness: CGFloat = 1.0 {
         didSet {
             trackLayer.setNeedsDisplay()
             lowerThumbLayer.setNeedsDisplay()
@@ -68,7 +68,7 @@ class UIGraphRangeSlider: UIControl {
         }
     }
     
-    var graphPoints: [Int] = [] {
+    public var graphPoints: [Int] = [] {
         didSet{
             graphLayer.setNeedsDisplay()
         }
@@ -82,7 +82,7 @@ class UIGraphRangeSlider: UIControl {
     let thumbWidth:CGFloat = 30.0
     var previousLocation = CGPoint()
     
-    override var frame: CGRect {
+    override public var frame: CGRect {
         didSet {
             updateLayerFrames()
         }
@@ -93,7 +93,7 @@ class UIGraphRangeSlider: UIControl {
         setup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
@@ -116,7 +116,7 @@ class UIGraphRangeSlider: UIControl {
         layer.addSublayer(upperThumbLayer)
     }
     
-    func updateLayerFrames() {
+    private func updateLayerFrames() {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         
@@ -137,7 +137,7 @@ class UIGraphRangeSlider: UIControl {
         CATransaction.commit()
     }
     
-    func positionForValue(value: Double) -> Double {
+    public func positionForValue(value: Double) -> Double {
         let a = Double(bounds.width - thumbWidth)
         let b = value - minimumValue
         let c = maximumValue - minimumValue
@@ -145,11 +145,11 @@ class UIGraphRangeSlider: UIControl {
         return a * b / c + d
     }
     
-    func boundValue(value: Double, toLowerValue lowerValue: Double, upperValue: Double) -> Double {
+    private func boundValue(value: Double, toLowerValue lowerValue: Double, upperValue: Double) -> Double {
         return min(max(value, lowerValue), upperValue)
     }
     
-    override func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
+    override public func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
         previousLocation = touch.locationInView(self)
         
         // Hit test the thumb layers
@@ -162,7 +162,7 @@ class UIGraphRangeSlider: UIControl {
         return lowerThumbLayer.highlited || upperThumbLayer.highlited
     }
     
-    override func continueTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
+    override public func continueTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
         let location = touch.locationInView(self)
         // 1. Determine by how muh the user has dragged
         let deltaLocation = Double(location.x - previousLocation.x)
@@ -184,7 +184,7 @@ class UIGraphRangeSlider: UIControl {
         return true
     }
     
-    override func endTrackingWithTouch(touch: UITouch?, withEvent event: UIEvent?) {
+    override public func endTrackingWithTouch(touch: UITouch?, withEvent event: UIEvent?) {
         lowerThumbLayer.highlited = false
         upperThumbLayer.highlited = false
     }
