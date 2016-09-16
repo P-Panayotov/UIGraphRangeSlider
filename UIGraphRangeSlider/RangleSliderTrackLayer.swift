@@ -12,33 +12,33 @@ import QuartzCore
 class RangleSliderTrackLayer: CALayer {
     weak var rangeSlider: UIGraphRangeSlider?
     
-    override func drawInContext(ctx: CGContext) {
+    override func draw(in ctx: CGContext) {
         if let slider = rangeSlider {
             // Clip
             let path = UIBezierPath()
-            CGContextAddPath(ctx, path.CGPath)
+            ctx.addPath(path.cgPath)
             
             // Fill the track
-            CGContextSetFillColorWithColor(ctx, slider.trackTintColor.colorWithAlphaComponent(0.4).CGColor)
-            CGContextAddPath(ctx, path.CGPath)
-            CGContextFillPath(ctx)
+            ctx.setFillColor(slider.trackTintColor.withAlphaComponent(0.4).cgColor)
+            ctx.addPath(path.cgPath)
+            ctx.fillPath()
             
             // Fill the highlighted range
-            CGContextSetFillColorWithColor(ctx, slider.trackHighlightTintColor.colorWithAlphaComponent(0.4).CGColor)
+            ctx.setFillColor(slider.trackHighlightTintColor.withAlphaComponent(0.4).cgColor)
             let lowerValuePosition = CGFloat(slider.positionForValue(slider.lowerValue))
             let upperValuePosition = CGFloat(slider.positionForValue(slider.upperValue))
             let rect = CGRect(x: lowerValuePosition, y: 0.0, width: upperValuePosition - lowerValuePosition, height: bounds.height)
-            CGContextFillRect(ctx, rect)
+            ctx.fill(rect)
             
             let borderPath = UIBezierPath()
-            CGContextMoveToPoint(ctx, lowerValuePosition, 0)
-            CGContextAddLineToPoint(ctx, lowerValuePosition, bounds.height)
-            CGContextMoveToPoint(ctx, upperValuePosition, 0)
-            CGContextAddLineToPoint(ctx, upperValuePosition, bounds.height)
-            CGContextSetLineWidth(ctx, 2)
-            CGContextSetStrokeColorWithColor(ctx, slider.trackHighlightTintColor.CGColor)
-            CGContextAddPath(ctx, borderPath.CGPath)
-            CGContextStrokePath(ctx)
+            ctx.move(to: CGPoint(x: lowerValuePosition, y: 0))
+            ctx.addLine(to: CGPoint(x: lowerValuePosition, y: bounds.height))
+            ctx.move(to: CGPoint(x: upperValuePosition, y: 0))
+            ctx.addLine(to: CGPoint(x: upperValuePosition, y: bounds.height))
+            ctx.setLineWidth(2)
+            ctx.setStrokeColor(slider.trackHighlightTintColor.cgColor)
+            ctx.addPath(borderPath.cgPath)
+            ctx.strokePath()
             
         }
     }

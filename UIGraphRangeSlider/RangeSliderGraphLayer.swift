@@ -11,7 +11,7 @@ import UIKit
 class RangeSliderGraphLayer: CALayer {
     weak var rangleSlider: UIGraphRangeSlider?
     
-    override func drawInContext(ctx: CGContext) {
+    override func draw(in ctx: CGContext) {
         //Draw the graph points
         if let slider = self.rangleSlider {
             
@@ -22,9 +22,8 @@ class RangeSliderGraphLayer: CALayer {
             let colorLocations:[CGFloat] = [0.0, 1.0]
             
             //5 - create the gradient
-            let gradient = CGGradientCreateWithColors(colorSpace,
-                                                      [slider.graphColor.CGColor, slider.graphColor.CGColor],
-                                                      colorLocations)
+            let gradient = CGGradient(colorsSpace: colorSpace, colors: [slider.graphColor.cgColor, slider.graphColor.cgColor] as CFArray, locations: colorLocations)
+            
             
             //6 - draw the gradient
             var startPoint = CGPoint.zero
@@ -45,7 +44,7 @@ class RangeSliderGraphLayer: CALayer {
             let topBorder:CGFloat = 20
             let bottomBorder:CGFloat = 5
             let graphHeight = slider.bounds.height - topBorder - bottomBorder
-            let maxValue = slider.graphPoints.maxElement()
+            let maxValue = slider.graphPoints.max()
             let columnYPoint = { (graphPoint:Int) -> CGFloat in
                 var y:CGFloat = CGFloat(graphPoint) /
                     CGFloat(maxValue ?? 0) * graphHeight
@@ -58,41 +57,41 @@ class RangeSliderGraphLayer: CALayer {
             let graphPath = UIBezierPath()
             //go to start of line
             let startingX = columnXPoint(0)
-            graphPath.moveToPoint(CGPoint(x:startingX,
+            graphPath.move(to: CGPoint(x:startingX,
                 y:columnYPoint(slider.graphPoints[0])))
             //add points for each item in the graphPoints array
             //at the correct (x, y) for the point
             for i in 1..<slider.graphPoints.count {
                 let nextPoint = CGPoint(x:columnXPoint(i),
                                         y:columnYPoint(slider.graphPoints[i]))
-                graphPath.addLineToPoint(nextPoint)
+                graphPath.addLine(to: nextPoint)
             }
             
-            CGContextSaveGState(ctx)
+            ctx.saveGState()
             let clipPath = graphPath.copy() as! UIBezierPath
 
-            clipPath.addLineToPoint(CGPoint(
+            clipPath.addLine(to: CGPoint(
                 x: columnXPoint(slider.graphPoints.count - 1),
                 y:bounds.height))
-            clipPath.addLineToPoint(CGPoint(
+            clipPath.addLine(to: CGPoint(
                 x:columnXPoint(0),
                 y:bounds.height))
             
-            CGContextAddPath(ctx, clipPath.CGPath)
-            CGContextClip(ctx)
+            ctx.addPath(clipPath.cgPath)
+            ctx.clip()
             let highestYPoint = columnYPoint(maxValue!)
             startPoint = CGPoint(x:margin, y: highestYPoint)
             endPoint = CGPoint(x:margin, y:self.bounds.height)
-            CGContextDrawLinearGradient(ctx, gradient, startPoint, endPoint, .DrawsAfterEndLocation)
-            CGContextRestoreGState(ctx)
+            ctx.drawLinearGradient(gradient!, start: startPoint, end: endPoint, options: .drawsAfterEndLocation)
+            ctx.restoreGState()
             
             
-            CGContextSetStrokeColorWithColor(ctx, slider.graphColor.CGColor)
-            CGContextSetLineJoin(ctx, .Round)
-            CGContextSetLineCap(ctx, .Round)
-            CGContextSetLineWidth(ctx, 1.0)
-            CGContextAddPath(ctx, graphPath.CGPath)
-            CGContextStrokePath(ctx)
+            ctx.setStrokeColor(slider.graphColor.cgColor)
+            ctx.setLineJoin(.round)
+            ctx.setLineCap(.round)
+            ctx.setLineWidth(1.0)
+            ctx.addPath(graphPath.cgPath)
+            ctx.strokePath()
             
         }
 

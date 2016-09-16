@@ -9,58 +9,58 @@
 import UIKit
 import QuartzCore
 
-public class UIGraphRangeSlider: UIControl {
+open class UIGraphRangeSlider: UIControl {
 
-    public var minimumValue: Double = 0.0 {
+    open var minimumValue: Double = 0.0 {
         didSet {
             updateLayerFrames()
         }
     }
     
-    public var maximumValue: Double = 1.0 {
+    open var maximumValue: Double = 1.0 {
         didSet {
             updateLayerFrames()
         }
     }
     
-    public var lowerValue: Double = 0.2 {
+    open var lowerValue: Double = 0.2 {
         didSet {
             updateLayerFrames()
         }
     }
     
-    public var upperValue: Double = 0.8 {
+    open var upperValue: Double = 0.8 {
         didSet {
             updateLayerFrames()
         }
     }
     
-    public var trackTintColor: UIColor = UIColor(white: 0.1, alpha: 1.0) {
+    open var trackTintColor: UIColor = UIColor(white: 0.1, alpha: 1.0) {
         didSet {
             trackLayer.setNeedsDisplay()
         }
     }
     
-    public var graphColor: UIColor = UIColor(red: 93.0/255.0, green: 184.0/255.0, blue: 225.0/255.0, alpha: 1.0) {
+    open var graphColor: UIColor = UIColor(red: 93.0/255.0, green: 184.0/255.0, blue: 225.0/255.0, alpha: 1.0) {
         didSet {
             graphLayer.setNeedsDisplay()
         }
     }
     
-    public var trackHighlightTintColor: UIColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0) {
+    open var trackHighlightTintColor: UIColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0) {
         didSet {
             trackLayer.setNeedsDisplay()
         }
     }
     
-    public var thumbTintColor: UIColor = UIColor.whiteColor() {
+    open var thumbTintColor: UIColor = UIColor.white {
         didSet {
             lowerThumbLayer.setNeedsDisplay()
             upperThumbLayer.setNeedsDisplay()
         }
     }
     
-    public var curvaceousness: CGFloat = 1.0 {
+    open var curvaceousness: CGFloat = 1.0 {
         didSet {
             trackLayer.setNeedsDisplay()
             lowerThumbLayer.setNeedsDisplay()
@@ -68,7 +68,7 @@ public class UIGraphRangeSlider: UIControl {
         }
     }
     
-    public var graphPoints: [Int] = [] {
+    open var graphPoints: [Int] = [] {
         didSet{
             graphLayer.setNeedsDisplay()
         }
@@ -82,7 +82,7 @@ public class UIGraphRangeSlider: UIControl {
     let thumbWidth:CGFloat = 30.0
     var previousLocation = CGPoint()
     
-    override public var frame: CGRect {
+    override open var frame: CGRect {
         didSet {
             updateLayerFrames()
         }
@@ -98,25 +98,25 @@ public class UIGraphRangeSlider: UIControl {
         setup()
     }
     
-    private func setup() {
+    fileprivate func setup() {
         graphLayer.rangleSlider = self
-        graphLayer.contentsScale = UIScreen.mainScreen().scale
+        graphLayer.contentsScale = UIScreen.main.scale
         layer.addSublayer(graphLayer)
         
         trackLayer.rangeSlider = self
-        trackLayer.contentsScale = UIScreen.mainScreen().scale
+        trackLayer.contentsScale = UIScreen.main.scale
         layer.addSublayer(trackLayer)
         
         lowerThumbLayer.rangeSlider = self
-        lowerThumbLayer.contentsScale = UIScreen.mainScreen().scale
+        lowerThumbLayer.contentsScale = UIScreen.main.scale
         layer.addSublayer(lowerThumbLayer)
         
         upperThumbLayer.rangeSlider = self
-        upperThumbLayer.contentsScale = UIScreen.mainScreen().scale
+        upperThumbLayer.contentsScale = UIScreen.main.scale
         layer.addSublayer(upperThumbLayer)
     }
     
-    private func updateLayerFrames() {
+    fileprivate func updateLayerFrames() {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         
@@ -137,7 +137,7 @@ public class UIGraphRangeSlider: UIControl {
         CATransaction.commit()
     }
     
-    public func positionForValue(value: Double) -> Double {
+    open func positionForValue(_ value: Double) -> Double {
         let a = Double(bounds.width - thumbWidth)
         let b = value - minimumValue
         let c = maximumValue - minimumValue
@@ -145,12 +145,12 @@ public class UIGraphRangeSlider: UIControl {
         return a * b / c + d
     }
     
-    private func boundValue(value: Double, toLowerValue lowerValue: Double, upperValue: Double) -> Double {
+    fileprivate func boundValue(_ value: Double, toLowerValue lowerValue: Double, upperValue: Double) -> Double {
         return min(max(value, lowerValue), upperValue)
     }
     
-    override public func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
-        previousLocation = touch.locationInView(self)
+    override open func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        previousLocation = touch.location(in: self)
         
         // Hit test the thumb layers
         if lowerThumbLayer.frame.contains(previousLocation) {
@@ -162,8 +162,8 @@ public class UIGraphRangeSlider: UIControl {
         return lowerThumbLayer.highlited || upperThumbLayer.highlited
     }
     
-    override public func continueTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
-        let location = touch.locationInView(self)
+    override open func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        let location = touch.location(in: self)
         // 1. Determine by how muh the user has dragged
         let deltaLocation = Double(location.x - previousLocation.x)
         let deltaValue = (maximumValue - minimumValue) * deltaLocation / Double(bounds.width - thumbWidth)
@@ -179,12 +179,12 @@ public class UIGraphRangeSlider: UIControl {
             upperValue = boundValue(upperValue, toLowerValue: lowerValue, upperValue: maximumValue)
         }
         
-        sendActionsForControlEvents(.ValueChanged)
+        sendActions(for: .valueChanged)
         
         return true
     }
     
-    override public func endTrackingWithTouch(touch: UITouch?, withEvent event: UIEvent?) {
+    override open func endTracking(_ touch: UITouch?, with event: UIEvent?) {
         lowerThumbLayer.highlited = false
         upperThumbLayer.highlited = false
     }
